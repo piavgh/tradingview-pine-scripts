@@ -1,0 +1,25 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © hoangtrinhj
+
+//@version=4
+strategy("MA RSI", overlay=true, default_qty_value=0.005, initial_capital=1000, commission_type=strategy.commission.percent, commission_value=0.04)
+
+// Create Indicator's
+shortSMA = sma(close, 10)
+longSMA = sma(close, 30)
+rsi = rsi(close, 14)
+
+// Specify crossover conditions
+longCondition = crossover(shortSMA, longSMA)
+shortCondition = crossunder(shortSMA, longSMA)
+
+// Execute trade if condition is True
+if (longCondition)
+    strategy.entry("long", strategy.long, when = rsi > 50)
+
+if (shortCondition)
+    strategy.entry("short", strategy.short, when = rsi < 50)
+
+// Plot Moving Average's to chart
+plot(shortSMA)
+plot(longSMA, color=color.black)
